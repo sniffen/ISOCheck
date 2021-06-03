@@ -1,0 +1,218 @@
+<html>
+<head>
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+  <body>
+
+    <script src="js/jquery_3.6.0.min.js"></script>
+
+    <!-- <script src="data.js"></script> -->
+
+    <script src="mutant.js"></script>
+    <script src="bio.js"></script>
+    <script src="tech.js"></script>
+    <script src="mystic.js"></script>
+    <script src="skill.js"></script>
+
+
+    <div class="container">
+
+      <div class="row mb-12">
+        <div id='Tech' class="col-3 themed-grid-col">
+          <h1>Tech</h1>
+        </div>
+
+        <div id='Skill' class="col-3 themed-grid-col">
+          <h1>Skill</h1>
+        </div>
+
+        <div id='Bio' class="col-3 themed-grid-col">
+          <h1>Bio</h1>
+        </div>
+
+        <div id='Mutant' class="col-3 themed-grid-col">
+          <h1>Mutant</h1>
+        </div>
+
+        <div id='Mystic' class="col-3 themed-grid-col">
+          <h1>Mystic</h1>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row mb-12" style='padding-top: 50px;'>
+      <div class="col-3 themed-grid-col"></div>
+      <div id='data' class="col-6 themed-grid-col">
+        <div id='info'></div>
+        <textarea id='alliancedata' rows="10" cols="60"></textarea><br />
+        <button onClick='preProcessData()'>Process data</button>
+      </div>
+      <div class="col-3 themed-grid-col"></div>
+    </div>
+
+
+    <script>
+
+      var data = [];
+
+      function sortByTechISO(a, b) {
+        if (a.ISO4Tech == b.ISO4Tech) { return 0; }
+        if (a.ISO4Tech < b.ISO4Tech)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+      }
+
+      function sortBySkillISO(a, b) {
+        if (a.ISO4Skill == b.ISO4Skill) { return 0; }
+        if (a.ISO4Skill < b.ISO4Skill)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+      }
+
+      function sortByBioISO(a, b) {
+        if (a.ISO4Bio == b.ISO4Bio) { return 0; }
+        if (a.ISO4Bio < b.ISO4Bio)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+      }
+
+      function sortByMutantISO(a, b) {
+        if (a.ISO4Mutant == b.ISO4Mutant) { return 0; }
+        if (a.ISO4Mutant < b.ISO4Mutant)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+      }
+
+      function sortByMysticISO(a, b) {
+        if (a.ISO4Mystic == b.ISO4Mystic) { return 0; }
+        if (a.ISO4Mystic < b.ISO4Mystic)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+      }
+
+      function preProcessData() {
+        try {
+          data = JSON.parse($("#alliancedata").val());
+          $("#info").html("Data parsed.<br />");
+          processData();
+        }
+        catch(e) {
+          $("#info").html("Something went wrong, please try again.<br />");
+        }
+      }
+
+      function processData() {
+        var players = [];
+
+        for(var i = 0; i<data.length; i++) {
+          if(typeof(players.find(p => p.Name === data[i].Name)) == 'undefined') {
+            var p = {Name: ""};
+            p.Name = data[i].Name;
+            p.ISO4Tech = 0;
+            p.ISO5Tech = 0;
+            p.ISO4Skill = 0;
+            p.ISO5Skill = 0;
+            p.ISO4Bio = 0;
+            p.ISO5Bio = 0;
+            p.ISO4Mutant = 0;
+            p.ISO5Mutant = 0;
+            p.ISO4Mystic = 0;
+            p.ISO5Mystic = 0;
+            players[players.length] = p;
+          }
+
+          if(data[i]["ISO Level"] == 5) {
+            if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO5Tech++
+            }
+            if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO5Mutant++
+            }
+            if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO5Bio++
+            }
+            if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO5Mystic++
+            }
+            if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO5Skill++
+            }
+          }
+          else if(data[i]["ISO Level"] == 4) {
+            if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO4Tech++
+            }
+            if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO4Mutant++
+            }
+            if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO4Bio++
+            }
+            if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO4Mystic++
+            }
+            if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
+              players.find(p => p.Name === data[i].Name).ISO4Skill++
+            }
+          }
+        }
+
+        players.sort(sortByTechISO);
+        for(var i=0; i<players.length; i++) {
+          $("#Tech").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Tech + " - ISO5: " + players[i].ISO5Tech + "</div>");
+        }
+
+        players.sort(sortBySkillISO);
+        for(var i=0; i<players.length; i++) {
+          $("#Skill").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Skill + " - ISO5: " + players[i].ISO5Skill + "</div>");
+        }
+
+        players.sort(sortByBioISO);
+        for(var i=0; i<players.length; i++) {
+          $("#Bio").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Bio + " - ISO5: " + players[i].ISO5Bio + "</div>");
+        }
+
+        players.sort(sortByMutantISO);
+        for(var i=0; i<players.length; i++) {
+          $("#Mutant").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Mutant + " - ISO5: " + players[i].ISO5Mutant + "</div>");
+        }
+
+        players.sort(sortByMysticISO);
+        for(var i=0; i<players.length; i++) {
+          $("#Mystic").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Mystic + " - ISO5: " + players[i].ISO5Mystic + "</div>");
+        }
+      }
+
+    </script>
+
+  </body>
+</html>
