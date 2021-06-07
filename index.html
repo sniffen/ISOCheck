@@ -3,11 +3,14 @@
 
   <!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-treeview.min.css" rel="stylesheet">
+  <link href="css/all.min.css" rel="stylesheet">
 
 </head>
   <body>
 
     <script src="js/jquery_3.6.0.min.js"></script>
+    <script src="js/bootstrap-treeview.min.js"></script>
 
     <!-- <script src="data.js"></script> -->
 
@@ -21,24 +24,29 @@
     <div class="container">
 
       <div class="row mb-12">
-        <div id='Tech' class="col-3 themed-grid-col">
+        <div id='Tech' class="col-4 themed-grid-col">
           <h1>Tech</h1>
+          <div id='TechTree'></div>
         </div>
 
-        <div id='Skill' class="col-3 themed-grid-col">
+        <div id='Skill' class="col-4 themed-grid-col">
           <h1>Skill</h1>
+          <div id='SkillTree'></div>
         </div>
 
-        <div id='Bio' class="col-3 themed-grid-col">
+        <div id='Bio' class="col-4 themed-grid-col">
           <h1>Bio</h1>
+          <div id='BioTree'></div>
         </div>
 
-        <div id='Mutant' class="col-3 themed-grid-col">
+        <div id='Mutant' class="col-4 themed-grid-col">
           <h1>Mutant</h1>
+          <div id='MutantTree'></div>
         </div>
 
-        <div id='Mystic' class="col-3 themed-grid-col">
+        <div id='Mystic' class="col-4 themed-grid-col">
           <h1>Mystic</h1>
+          <div id='MysticTree'></div>
         </div>
       </div>
 
@@ -49,9 +57,9 @@
       <div id='data' class="col-6 themed-grid-col">
         <div id='info'></div>
         <textarea id='alliancedata' rows="10" cols="60"></textarea><br />
-        <button onClick='preProcessData()'>Process data</button>
+        <button onClick='preProcessData(true)'>Process data</button>
       </div>
-      <div class="col-3 themed-grid-col"></div>
+      <div class="col-3 themed-grid-col">
     </div>
 
 
@@ -60,8 +68,8 @@
       var data = [];
 
       function sortByTechISO(a, b) {
-        if (a.ISO4Tech == b.ISO4Tech) { return 0; }
-        if (a.ISO4Tech < b.ISO4Tech)
+        if ((a.ISO4Tech+a.ISO5Tech) == (b.ISO4Tech+b.ISO5Tech)) { return 0; }
+        if ((a.ISO4Tech+a.ISO5Tech) < (b.ISO4Tech+b.ISO5Tech))
         {
             return 1;
         }
@@ -72,8 +80,8 @@
       }
 
       function sortBySkillISO(a, b) {
-        if (a.ISO4Skill == b.ISO4Skill) { return 0; }
-        if (a.ISO4Skill < b.ISO4Skill)
+        if ((a.ISO4Skill+a.ISO5Skill) == (b.ISO4Skill+b.ISO5Skill)) { return 0; }
+        if ((a.ISO4Skill+a.ISO5Skill) < (b.ISO4Skill+b.ISO5Skill))
         {
             return 1;
         }
@@ -84,8 +92,8 @@
       }
 
       function sortByBioISO(a, b) {
-        if (a.ISO4Bio == b.ISO4Bio) { return 0; }
-        if (a.ISO4Bio < b.ISO4Bio)
+        if ((a.ISO4Bio+a.ISO5Bio) == (b.ISO4Bio+b.ISO5Bio)) { return 0; }
+        if ((a.ISO4Bio+a.ISO5Bio) < (b.ISO4Bio+b.ISO5Bio))
         {
             return 1;
         }
@@ -96,8 +104,8 @@
       }
 
       function sortByMutantISO(a, b) {
-        if (a.ISO4Mutant == b.ISO4Mutant) { return 0; }
-        if (a.ISO4Mutant < b.ISO4Mutant)
+        if ((a.ISO4Mutant+a.ISO5Mutant) == (b.ISO4Mutant+b.ISO5Mutant)) { return 0; }
+        if ((a.ISO4Mutant+a.ISO5Mutant) < (b.ISO4Mutant+b.ISO5Mutant))
         {
             return 1;
         }
@@ -108,8 +116,8 @@
       }
 
       function sortByMysticISO(a, b) {
-        if (a.ISO4Mystic == b.ISO4Mystic) { return 0; }
-        if (a.ISO4Mystic < b.ISO4Mystic)
+        if ((a.ISO4Mystic+a.ISO5Mystic) == (b.ISO4Mystic+b.ISO5Mystic)) { return 0; }
+        if ((a.ISO4Mystic+a.ISO5Mystic) < (b.ISO4Mystic+b.ISO5Mystic))
         {
             return 1;
         }
@@ -119,14 +127,48 @@
         }
       }
 
-      function preProcessData() {
+      function csvToJson() {
+        console.log("")
+
+        var csv = $("#alliancedata").val();
+        var rows = csv.split('\n');
+        var headers = rows[0].split(',');
+
+        var jsonData = [];
+
+        for(var i = 1; i<rows.length; i++) {
+
+          var currentRow = rows[i].split(',');
+
+          if(currentRow.length > 1) {
+            var obj = {};
+
+            for(var j = 0; j<headers.length; j++) {
+              obj[headers[j]] = currentRow[j];
+            }
+
+            jsonData.push(obj);
+          }
+        }
+
+        $("#alliancedata").val(JSON.stringify(jsonData));
+
+        preProcessData(false);
+      }
+
+      function preProcessData(tryCsv) {
         try {
           data = JSON.parse($("#alliancedata").val());
           $("#info").html("Data parsed.<br />");
           processData();
         }
         catch(e) {
-          $("#info").html("Something went wrong, please try again.<br />");
+          if(tryCsv) {
+            csvToJson();
+          }
+          else {
+            $("#info").html("Something went wrong, please try again.<br />");
+          }
         }
       }
 
@@ -136,6 +178,10 @@
         for(var i = 0; i<data.length; i++) {
           if(typeof(players.find(p => p.Name === data[i].Name)) == 'undefined') {
             var p = {Name: ""};
+            p.icon = "fas fa-plus";
+            p.selectedIcon = "fas fa-minus";
+            p.state = { expanded: false, selected: false };
+            p.text = data[i].Name;
             p.Name = data[i].Name;
             p.ISO4Tech = 0;
             p.ISO5Tech = 0;
@@ -147,68 +193,260 @@
             p.ISO5Mutant = 0;
             p.ISO4Mystic = 0;
             p.ISO5Mystic = 0;
+            p.nodes = [];
+            p.techNodes = [];
+            p.skillNodes = [];
+            p.bioNodes = [];
+            p.mutantNodes = [];
+            p.mysticNodes = [];
             players[players.length] = p;
           }
 
           if(data[i]["ISO Level"] == 5) {
             if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Tech++
+              var obj = {};
+              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              players.find(p => p.Name === data[i].Name).techNodes[players.find(p => p.Name === data[i].Name).techNodes.length] = obj;
             }
             if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Mutant++
+              var obj = {};
+              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              players.find(p => p.Name === data[i].Name).mutantNodes[players.find(p => p.Name === data[i].Name).mutantNodes.length] = obj;
             }
             if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Bio++
+              var obj = {};
+              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              players.find(p => p.Name === data[i].Name).bioNodes[players.find(p => p.Name === data[i].Name).bioNodes.length] = obj;
             }
             if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Mystic++
+              var obj = {};
+              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              players.find(p => p.Name === data[i].Name).mysticNodes[players.find(p => p.Name === data[i].Name).mysticNodes.length] = obj;
             }
             if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Skill++
+              var obj = {};
+              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              players.find(p => p.Name === data[i].Name).skillNodes[players.find(p => p.Name === data[i].Name).skillNodes.length] = obj;
             }
           }
           else if(data[i]["ISO Level"] == 4) {
             if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Tech++
+              var obj = {};
+              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              players.find(p => p.Name === data[i].Name).techNodes[players.find(p => p.Name === data[i].Name).techNodes.length] = obj;
             }
             if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Mutant++
+              var obj = {};
+              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              players.find(p => p.Name === data[i].Name).mutantNodes[players.find(p => p.Name === data[i].Name).mutantNodes.length] = obj;
             }
             if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Bio++
+              var obj = {};
+              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              players.find(p => p.Name === data[i].Name).bioNodes[players.find(p => p.Name === data[i].Name).bioNodes.length] = obj;
             }
             if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Mystic++
+              var obj = {};
+              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              players.find(p => p.Name === data[i].Name).mysticNodes[players.find(p => p.Name === data[i].Name).mysticNodes.length] = obj;
             }
             if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Skill++
+              var obj = {};
+              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              players.find(p => p.Name === data[i].Name).skillNodes[players.find(p => p.Name === data[i].Name).skillNodes.length] = obj;
             }
           }
         }
 
         players.sort(sortByTechISO);
         for(var i=0; i<players.length; i++) {
-          $("#Tech").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Tech + " - ISO5: " + players[i].ISO5Tech + "</div>");
+          //$("#Tech").append("<div>" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Tech + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Tech + "</span></div>");
+          players[i].nodes = players[i].techNodes;
+          players[i].text = "&nbsp;" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Tech + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Tech + "</span> <span class='badge rounded-pill bg-secondary'>Total: " + (players[i].ISO5Tech+players[i].ISO4Tech) + "</span>";
         }
+
+        $('#TechTree').treeview({
+          data: players,
+          highlightSelected: true,
+          onNodeSelected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("tech", node.nodeId);
+            }
+            else {
+              expandNode("tech", node.nodeId);
+            }
+          },
+          onNodeUnselected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("tech", node.nodeId);
+            }
+            else {
+              expandNode("tech", node.nodeId);
+            }
+          }
+        });
+        $('#TechTree').treeview('collapseAll', { silent: true });
 
         players.sort(sortBySkillISO);
         for(var i=0; i<players.length; i++) {
-          $("#Skill").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Skill + " - ISO5: " + players[i].ISO5Skill + "</div>");
+          //$("#Skill").append("<div>" + players[i].Name + " - ISO5: " + players[i].ISO5Skill + " - ISO4: " + players[i].ISO4Skill + "</div>");
+          players[i].nodes = players[i].skillNodes;
+          players[i].text = "&nbsp;" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Skill + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Skill + "</span> <span class='badge rounded-pill bg-secondary'>Total: " + (players[i].ISO5Skill+players[i].ISO4Skill) + "</span>";
         }
+
+        $('#SkillTree').treeview({
+          data: players,
+          highlightSelected: true,
+          onNodeSelected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("skill", node.nodeId);
+            }
+            else {
+              expandNode("skill", node.nodeId);
+            }
+          },
+          onNodeUnselected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("skill", node.nodeId);
+            }
+            else {
+              expandNode("skill", node.nodeId);
+            }
+          }
+        });
+        $('#SkillTree').treeview('collapseAll', { silent: true });
 
         players.sort(sortByBioISO);
         for(var i=0; i<players.length; i++) {
-          $("#Bio").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Bio + " - ISO5: " + players[i].ISO5Bio + "</div>");
+          //$("#Bio").append("<div>" + players[i].Name + " - ISO5: " + players[i].ISO5Bio + " - ISO4: " + players[i].ISO4Bio + "</div>");
+          players[i].nodes = players[i].bioNodes;
+          players[i].text = "&nbsp;" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Bio + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Bio + "</span> <span class='badge rounded-pill bg-secondary'>Total: " + (players[i].ISO5Bio+players[i].ISO4Bio) + "</span>";
         }
+
+        $('#BioTree').treeview({
+          data: players,
+          highlightSelected: true,
+          onNodeSelected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("bio", node.nodeId);
+            }
+            else {
+              expandNode("bio", node.nodeId);
+            }
+          },
+          onNodeUnselected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("bio", node.nodeId);
+            }
+            else {
+              expandNode("bio", node.nodeId);
+            }
+          }
+        });
+        $('#BioTree').treeview('collapseAll', { silent: true });
 
         players.sort(sortByMutantISO);
         for(var i=0; i<players.length; i++) {
-          $("#Mutant").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Mutant + " - ISO5: " + players[i].ISO5Mutant + "</div>");
+          //$("#Mutant").append("<div>" + players[i].Name + " - ISO5: " + players[i].ISO5Mutant + " - ISO4: " + players[i].ISO4Mutant + "</div>");
+          players[i].nodes = players[i].mutantNodes;
+          players[i].text = "&nbsp;" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Mutant + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Mutant + "</span> <span class='badge rounded-pill bg-secondary'>Total: " + (players[i].ISO5Mutant+players[i].ISO4Mutant) + "</span>";
         }
+
+        $('#MutantTree').treeview({
+          data: players,
+          highlightSelected: true,
+          onNodeSelected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("mutant", node.nodeId);
+            }
+            else {
+              expandNode("mutant", node.nodeId);
+            }
+          },
+          onNodeUnselected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("mutant", node.nodeId);
+            }
+            else {
+              expandNode("mutant", node.nodeId);
+            }
+          }
+        });
+        $('#MutantTree').treeview('collapseAll', { silent: true });
 
         players.sort(sortByMysticISO);
         for(var i=0; i<players.length; i++) {
-          $("#Mystic").append("<div>" + players[i].Name + " - ISO4: " + players[i].ISO4Mystic + " - ISO5: " + players[i].ISO5Mystic + "</div>");
+          //$("#Mystic").append("<div>" + players[i].Name + " - ISO5: " + players[i].ISO5Mystic + " - ISO4: " + players[i].ISO4Mystic + "</div>");
+          players[i].nodes = players[i].mysticNodes;
+          players[i].text = "&nbsp;" + players[i].Name + "&nbsp; <span class='badge rounded-pill bg-success'>ISO5: " + players[i].ISO5Mystic + "</span> <span class='badge rounded-pill bg-danger'>ISO4: " + players[i].ISO4Mystic + "</span> <span class='badge rounded-pill bg-secondary'>Total: " + (players[i].ISO5Mystic+players[i].ISO4Mystic) + "</span>";
+        }
+
+        $('#MysticTree').treeview({
+          data: players,
+          highlightSelected: true,
+          onNodeSelected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("mystic", node.nodeId);
+            }
+            else {
+              expandNode("mystic", node.nodeId);
+            }
+          },
+          onNodeUnselected: function(event, node) {
+            if (node.state.expanded) {
+              collapseNode("mystic", node.nodeId);
+            }
+            else {
+              expandNode("mystic", node.nodeId);
+            }
+          }
+        });
+        $('#MysticTree').treeview('collapseAll', { silent: true });
+      }
+
+      function expandNode(type, nodeId) {
+        if(type == "mystic") {
+          $('#MysticTree').treeview('expandNode', [nodeId]);
+        }
+        else if(type == "mutant") {
+          $('#MutantTree').treeview('expandNode', [nodeId]);
+        }
+        else if(type == "bio") {
+          $('#BioTree').treeview('expandNode', [nodeId]);
+        }
+        else if(type == "skill") {
+          $('#SkillTree').treeview('expandNode', [nodeId]);
+        }
+        else if(type == "tech") {
+          $('#TechTree').treeview('expandNode', [nodeId]);
+        }
+      }
+
+      function collapseNode(type, nodeId) {
+        if(type == "mystic") {
+          $('#MysticTree').treeview('collapseNode', [nodeId]);
+        }
+        else if(type == "mutant") {
+          $('#MutantTree').treeview('collapseNode', [nodeId]);
+        }
+        else if(type == "bio") {
+          $('#BioTree').treeview('collapseNode', [nodeId]);
+        }
+        else if(type == "skill") {
+          $('#SkillTree').treeview('collapseNode', [nodeId]);
+        }
+        else if(type == "tech") {
+          $('#TechTree').treeview('collapseNode', [nodeId]);
         }
       }
 
