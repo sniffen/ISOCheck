@@ -212,31 +212,31 @@
             if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Tech++
               var obj = {};
-              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-success'>ISO5</span>";
               players.find(p => p.Name === data[i].Name).techNodes[players.find(p => p.Name === data[i].Name).techNodes.length] = obj;
             }
             if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Mutant++
               var obj = {};
-              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-success'>ISO5</span>";
               players.find(p => p.Name === data[i].Name).mutantNodes[players.find(p => p.Name === data[i].Name).mutantNodes.length] = obj;
             }
             if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Bio++
               var obj = {};
-              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-success'>ISO5</span>";
               players.find(p => p.Name === data[i].Name).bioNodes[players.find(p => p.Name === data[i].Name).bioNodes.length] = obj;
             }
             if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Mystic++
               var obj = {};
-              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-success'>ISO5</span>";
               players.find(p => p.Name === data[i].Name).mysticNodes[players.find(p => p.Name === data[i].Name).mysticNodes.length] = obj;
             }
             if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO5Skill++
               var obj = {};
-              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-success'>ISO5</span>";
+              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-success'>ISO5</span>";
               players.find(p => p.Name === data[i].Name).skillNodes[players.find(p => p.Name === data[i].Name).skillNodes.length] = obj;
             }
           }
@@ -244,31 +244,31 @@
             if(typeof(techList.find(tl => tl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Tech++
               var obj = {};
-              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              obj.text = techList.find(tl => tl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-danger'>ISO4</span>";
               players.find(p => p.Name === data[i].Name).techNodes[players.find(p => p.Name === data[i].Name).techNodes.length] = obj;
             }
             if(typeof(mutantList.find(ml => ml.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Mutant++
               var obj = {};
-              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              obj.text = mutantList.find(ml => ml.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-danger'>ISO4</span>";
               players.find(p => p.Name === data[i].Name).mutantNodes[players.find(p => p.Name === data[i].Name).mutantNodes.length] = obj;
             }
             if(typeof(bioList.find(bl => bl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Bio++
               var obj = {};
-              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              obj.text = bioList.find(bl => bl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-danger'>ISO4</span>";
               players.find(p => p.Name === data[i].Name).bioNodes[players.find(p => p.Name === data[i].Name).bioNodes.length] = obj;
             }
             if(typeof(mysticList.find(myl => myl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Mystic++
               var obj = {};
-              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              obj.text = mysticList.find(myl => myl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-danger'>ISO4</span>";
               players.find(p => p.Name === data[i].Name).mysticNodes[players.find(p => p.Name === data[i].Name).mysticNodes.length] = obj;
             }
             if(typeof(skillList.find(sl => sl.CharacterId === data[i].CharacterId)) != 'undefined') {
               players.find(p => p.Name === data[i].Name).ISO4Skill++
               var obj = {};
-              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-danger'>ISO4</span>";
+              obj.text = skillList.find(sl => sl.CharacterId === data[i].CharacterId).Hero + " <span class='badge rounded-pill bg-primary'>" + Number(data[i].Power).toLocaleString() + "</span> <span class='badge rounded-pill bg-danger'>ISO4</span>";
               players.find(p => p.Name === data[i].Name).skillNodes[players.find(p => p.Name === data[i].Name).skillNodes.length] = obj;
             }
           }
