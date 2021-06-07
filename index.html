@@ -6,6 +6,12 @@
   <link href="css/bootstrap-treeview.min.css" rel="stylesheet">
   <link href="css/all.min.css" rel="stylesheet">
 
+  <style>
+  body {
+    overflow-x: hidden;
+  }
+  </style>
+
 </head>
   <body>
 
@@ -21,30 +27,30 @@
     <script src="skill.js"></script>
 
 
-    <div class="container">
+    <div class="container-fluid">
 
-      <div class="row mb-12">
-        <div id='Tech' class="col-4 themed-grid-col">
+      <div class="row row-cols-auto">
+        <div id='Tech' class="col">
           <h1>Tech</h1>
           <div id='TechTree'></div>
         </div>
 
-        <div id='Skill' class="col-4 themed-grid-col">
+        <div id='Skill' class="col">
           <h1>Skill</h1>
           <div id='SkillTree'></div>
         </div>
 
-        <div id='Bio' class="col-4 themed-grid-col">
+        <div id='Bio' class="col">
           <h1>Bio</h1>
           <div id='BioTree'></div>
         </div>
 
-        <div id='Mutant' class="col-4 themed-grid-col">
+        <div id='Mutant' class="col">
           <h1>Mutant</h1>
           <div id='MutantTree'></div>
         </div>
 
-        <div id='Mystic' class="col-4 themed-grid-col">
+        <div id='Mystic' class="col">
           <h1>Mystic</h1>
           <div id='MysticTree'></div>
         </div>
@@ -52,7 +58,7 @@
 
     </div>
 
-    <div class="row mb-12" style='padding-top: 50px;'>
+    <div class="row mb-12" style='padding-top: 50px; padding-bottom: 20px;'>
       <div class="col-3 themed-grid-col"></div>
       <div id='data' class="col-6 themed-grid-col">
         <div id='info'></div>
